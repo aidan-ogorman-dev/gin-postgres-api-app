@@ -35,20 +35,24 @@ func Login(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	user, err := models.FindUserByUsername(input.Username)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
 	}
 
 	if err = user.ValidatePassword(input.Password); err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		return
 	}
 
 	token, err := helper.GenerateJWT(user)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"jwt": token})

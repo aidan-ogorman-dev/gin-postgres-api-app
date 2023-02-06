@@ -32,5 +32,5 @@ func serveApplication() {
 	protectedRoutes.POST("/entry", controller.AddEntry)
 	protectedRoutes.GET("/entries", controller.GetAllEntries)
 
-	router.Run("localhost:8080")
+	router.Run("0.0.0.0:8080")
 }
